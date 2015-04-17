@@ -1,0 +1,48 @@
+@import "_mixins";
+
+// Main wrapper
+.bica-cookie-alert {
+    display: none;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    z-index: 99999999;
+
+    [data-role="button"] {
+        border: none;
+        background: transparent;
+        display: inline-block;
+        padding: 5px 50px;
+        border-radius: 6px;
+        cursor: pointer;
+        .transition('all', '1s', 'ease-in-out');
+
+        &:hover {
+            background: #000;
+        }
+    }
+}
+
+.bica-content {
+    .cf();
+    padding: 20px 30px;
+
+    .bica-disclaimer {
+        .stack & {
+            .center();
+            padding-bottom: 20px;
+        }
+        .column & {
+            .left();
+        }
+    }
+
+    .bica-actions {
+        .stack & {
+            .center();
+        }
+        .column & {
+            .right();
+        }
+    }
+}

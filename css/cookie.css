@@ -1,0 +1,6 @@
+.bica-cookie-alert{display:none;width:100%;position:fixed;bottom:0;z-index:99999999}.bica-cookie-alert [data-role="button"]{border:none;background:transparent;display:inline-block;padding:5px 50px;border-radius:6px;cursor:pointer;-webkit-transition:'all' '1s' 'ease-in-out';-moz-transition:'all' '1s' 'ease-in-out';-ms-transition:'all' '1s' 'ease-in-out';-o-transition:'all' '1s' 'ease-in-out';transition:'all' '1s' 'ease-in-out'}.bica-cookie-alert [data-role="button"]:hover{background:#000}
+.bica-content{*zoom:1;padding:20px 30px}.bica-content::before,.bica-content:after{content:" ";display:table;clear:both}
+.stack .bica-content .bica-disclaimer{width:100%;text-align:center;padding-bottom:20px}
+.column .bica-content .bica-disclaimer{float:left;width:50%;text-align:left}
+.stack .bica-content .bica-actions{width:100%;text-align:center}
+.column .bica-content .bica-actions{float:left;width:50%;text-align:right}
