@@ -98,6 +98,7 @@
     $wrapper.find('[data-action="dismiss"]')
       .on('click', function(){
         $wrapper.fadeOut('fast');
+        setCookie('bica', 'user_approved');
       });
   };
 
@@ -175,5 +176,42 @@
       b = hex & 0x0000ff;
     return [r, g, b];
   }
+
+  /**
+   * Set cookie helper
+   * @param {string} name
+   * @param {string} value
+   * @param {number} days
+   */
+  function setCookie(name, value, days) {
+    var d = new Date();
+    d.setTime(d.getTime() + (days*24*60*60*1000));
+    document.cookie = name +'='+ value +'; expires='+ d.toUTCString();
+  }
+
+  /**
+   * Delete cookie helper
+   * @param {string} cookie name to delete
+   */
+  function deleteCookie(name) {
+    document.cookie = name +'=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+  }
+
+  /**
+   * Get a cookie
+   * @param  {string} name
+   * @return {string} Cookie's value
+   */
+  function getCookie(name) {
+    var ca = document.cookie.split(';');
+    name = name + '=';
+    for(var i=0; i<ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1);
+      if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
+    }
+    return undefined;
+  }
+
 
 })(jQuery, 'bica-cookie-alert', window, document);
