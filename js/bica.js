@@ -18,18 +18,18 @@
     $window = $(window),
     // Settings container
     settings = {},
-    // Default settings object
+    // Default settings
     defaults = {
       txtColor: '#000',
       btnTxtColor: '#fff',
       btnBgBackgrund: '#666',
-      bgColor: '#ffffff', // this prop needs #rrggbb (full) notation
+      bgColor: '#ffffff', // this prop needs #rrggbb notation (full)
       bgOpacity: 0.9,
-      style: 'stack',
+      style: 'inline',
       // Fetch language from <html:lang> attribute, or use default
       language: document.documentElement.lang || 'it',
       // Wait this ms before show up
-      showAfter: 2000
+      showAfter: 1200
     },
     // Private plugin settings
     plugin = {
@@ -39,6 +39,8 @@
       root: getAbsolutePath(),
       // Cookie settings (expires in 2 years)
       cookie: {name: 'bica', value: 'is_approved', days: '730'},
+      // Min allowed font size
+      minFontSize: 12
     };
 
 
@@ -63,7 +65,7 @@
       if (data.status == 'OK') {
         $window.trigger('trans-loaded');
       } else {
-        $window.trigger('trans-not-loaded');
+        notify('Translations not loaded');
       }
     });
   };
@@ -84,6 +86,10 @@
     ;
   };
 
+  /**
+   * Mix color and opacity settings to get a rgba background
+   * @return {string} rgba() color notation
+   */
   function makeBackground() {
     if (settings.bgColor.length != 7) {
       notify(['HEX too short', settings.bgColor], 'error');
@@ -99,7 +105,7 @@
    */
   var translateLabels = function() {
     $('[data-trans]').each(function() {
-      this.innerText = plugin.translations[ this.attributes['data-trans'].value ];
+      this.innerHTML = plugin.translations[ this.attributes['data-trans'].value ];
     });
   };
 
@@ -121,6 +127,11 @@
     $wrapper.addClass(settings.style);
     $wrapper.find('[data-role="button"]')
       .css({"color": settings.btnTxtColor, "background": settings.btnBgBackgrund});
+
+    // Check that min font size is not smaller than allowed
+    $wrapper.css({
+      'fontSize': Math.max(parseInt($wrapper.css('fontSize'), 10), plugin.minFontSize)
+    });
   };
 
 
@@ -164,7 +175,7 @@
   /**
    * Private function for notify errors or warnings
    * @param  {string} message
-   * @param  {type} type of notice (warn|error)
+   * @param  {type} type of notice (info|warn|error)
    */
   function notify( message, type ) {
     type = type || 'info';
