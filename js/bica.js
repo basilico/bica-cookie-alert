@@ -9,9 +9,10 @@
  * Description:
  *
  * Usage:
+ *   <script src="vendor/bica/js/bica.js"></script>
+ *   <script>bica.init({ <options> })</script>
  */
-(function($, namespace, window, document) {
-  // Private
+var bica = (function($, namespace, window, document, undefined){
   var
     // Cache objects
     $wrapper,
@@ -28,11 +29,12 @@
       style: 'inline',
       // Fetch language from <html:lang> attribute, or use default
       language: document.documentElement.lang || 'it',
-      // Wait this ms before show up
+      // Milliseconds before show up
       showAfter: 1200
     },
     // Private plugin settings
     plugin = {
+      initialized: false,
       // i18n strings
       translations: {},
       // Plugin absolute path
@@ -40,32 +42,44 @@
       // Cookie settings (expires in 2 years)
       cookie: {name: 'bica', value: 'is_approved', days: '730'},
       // Min allowed font size
-      minFontSize: 12
+      minFontSize: 12,
+      // Views files
+      views: {
+        disclaimer: 'disclaimer',
+        info: 'info'
+      }
     };
 
 
   /**
-   * If cookie is not set, skip init
+   * Destroy plugin
    */
-  var checkCookie = function() {
-    var cookie = getCookie( plugin.cookie.name );
-    if (cookie != plugin.cookie.value) {
-      init();
-    }
-  };
+  var destroy = function() {};
 
   /**
    * Initializes plugin
    */
   var init = function( options ) {
+    if (plugin.initialized) return notify('Re-init not allowed');
     settings = $.extend({}, defaults, options);
+    // If cookie is not set, skip init
+    if (getCookie( plugin.cookie.name ) != plugin.cookie.value) {
+      $window.trigger('bica-ready');
+    } else {
+      destroy();
+    }
+  };
 
-    $.getJSON(plugin.root +'i18n/'+ settings.language +'.json', function(data) {
-      plugin.translations = data[settings.language];
-      if (data.status == 'OK') {
-        $window.trigger('trans-loaded');
+  /**
+   * Load i18n translations
+   */
+  var loadTranslations = function() {
+    $.getJSON(plugin.root +'i18n/'+ settings.language +'.json', function(json) {
+      plugin.translations = json[settings.language];
+      if (json.status == 'OK') {
+        $window.trigger('bica-trans-loaded');
       } else {
-        notify('Translations not loaded');
+        notify('Translation json not well formatted');
       }
     });
   };
@@ -73,14 +87,14 @@
   /**
    * Add css style and wrapper
    */
-  var manipulateDOM = function() {
+  var loadView = function() {
     // Inject CSS
     $('head').append( $('<link rel="stylesheet" type="text/css"/>').attr('href', plugin.root +'css/cookie.css') );
     // Add container to body and cache it
     $wrapper = $('<div/>', {"id": namespace, "class": namespace})
       .css({"background": makeBackground(), "color": settings.txtColor})
-      .load(plugin.root +'/view/info.html', function(){
-        $window.trigger('view-loaded');
+      .load(plugin.root +'/view/'+ plugin.views.disclaimer +'.html', function(){
+        $window.trigger('bica-view-loaded');
       })
       .prependTo('body')
     ;
@@ -136,8 +150,12 @@
 
 
   // Events
-  $window.on('trans-loaded', manipulateDOM);
-  $window.on('view-loaded', function(){
+  $window.on('bica-ready', function(){
+    plugin.initialized = true;
+    loadTranslations();
+  });
+  $window.on('bica-trans-loaded', loadView);
+  $window.on('bica-view-loaded', function(){
     applyEvents();
     applyStyles();
     translateLabels();
@@ -146,10 +164,7 @@
   });
 
 
-  // Run
-  checkCookie();
-
-
+  // Utilities
 
   /**
    * Private function to get plugin absolute path
@@ -238,5 +253,11 @@
     return undefined;
   }
 
+
+  // Public methods
+  return {
+    'init': init,
+    'destroy': destroy
+  };
 
 })(jQuery, 'bica-cookie-alert', window, document);
