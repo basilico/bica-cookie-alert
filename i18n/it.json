@@ -1,8 +1,8 @@
 {
   "it": {
-    "title": "COOKIE",
-    "disclaimer": "Ciao, io sono un cookie disclaimer. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique explicabo vel delectus tempora excepturi hic, libero suscipit, rem cupiditate, iste ab nihil vero repellendus voluptate?",
-    "dismiss": "OK"
+    "disclaimer": "I cookie ci aiutano a fornire i nostri servizi. Utilizzando tali servizi, accetti l'utilizzo dei cookie da parte nostra.",
+    "info": "Informazioni",
+    "dismiss": "CHIUDI"
   },
   "status": "OK"
 }

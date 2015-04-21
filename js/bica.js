@@ -18,27 +18,41 @@
     $window = $(window),
     // Settings container
     settings = {},
-    // Default settings object
+    // Default settings
     defaults = {
       txtColor: '#000',
       btnTxtColor: '#fff',
       btnBgBackgrund: '#666',
-      bgColor: '#ffffff', // this prop needs #rrggbb (full) notation
+      bgColor: '#ffffff', // this prop needs #rrggbb notation (full)
       bgOpacity: 0.9,
-      style: 'stack',
+      style: 'inline',
       // Fetch language from <html:lang> attribute, or use default
       language: document.documentElement.lang || 'it',
       // Wait this ms before show up
-      showAfter: 2000
+      showAfter: 1200
     },
     // Private plugin settings
     plugin = {
       // i18n strings
       translations: {},
       // Plugin absolute path
-      root: getAbsolutePath()
+      root: getAbsolutePath(),
+      // Cookie settings (expires in 2 years)
+      cookie: {name: 'bica', value: 'is_approved', days: '730'},
+      // Min allowed font size
+      minFontSize: 12
     };
 
+
+  /**
+   * If cookie is not set, skip init
+   */
+  var checkCookie = function() {
+    var cookie = getCookie( plugin.cookie.name );
+    if (cookie != plugin.cookie.value) {
+      init();
+    }
+  };
 
   /**
    * Initializes plugin
@@ -51,7 +65,7 @@
       if (data.status == 'OK') {
         $window.trigger('trans-loaded');
       } else {
-        $window.trigger('trans-not-loaded');
+        notify('Translations not loaded');
       }
     });
   };
@@ -72,6 +86,10 @@
     ;
   };
 
+  /**
+   * Mix color and opacity settings to get a rgba background
+   * @return {string} rgba() color notation
+   */
   function makeBackground() {
     if (settings.bgColor.length != 7) {
       notify(['HEX too short', settings.bgColor], 'error');
@@ -87,7 +105,7 @@
    */
   var translateLabels = function() {
     $('[data-trans]').each(function() {
-      this.innerText = plugin.translations[ this.attributes['data-trans'].value ];
+      this.innerHTML = plugin.translations[ this.attributes['data-trans'].value ];
     });
   };
 
@@ -98,6 +116,7 @@
     $wrapper.find('[data-action="dismiss"]')
       .on('click', function(){
         $wrapper.fadeOut('fast');
+        setCookie( plugin.cookie );
       });
   };
 
@@ -108,6 +127,11 @@
     $wrapper.addClass(settings.style);
     $wrapper.find('[data-role="button"]')
       .css({"color": settings.btnTxtColor, "background": settings.btnBgBackgrund});
+
+    // Check that min font size is not smaller than allowed
+    $wrapper.css({
+      'fontSize': Math.max(parseInt($wrapper.css('fontSize'), 10), plugin.minFontSize)
+    });
   };
 
 
@@ -117,12 +141,13 @@
     applyEvents();
     applyStyles();
     translateLabels();
+    // Show wrapper after delay
     $wrapper.delay(settings.showAfter).slideDown('medium');
   });
 
 
   // Run
-  init();
+  checkCookie();
 
 
 
@@ -150,7 +175,7 @@
   /**
    * Private function for notify errors or warnings
    * @param  {string} message
-   * @param  {type} type of notice (warn|error)
+   * @param  {type} type of notice (info|warn|error)
    */
   function notify( message, type ) {
     type = type || 'info';
@@ -175,5 +200,43 @@
       b = hex & 0x0000ff;
     return [r, g, b];
   }
+
+  /**
+   * Set cookie helper
+   * @param options:
+   *        {string} name
+   *        {string} value
+   *        {number} days
+   */
+  function setCookie(options) {
+    var d = new Date();
+    d.setTime(d.getTime() + (options.days * (24*60*60*1000)));
+    document.cookie = options.name +'='+ options.value +'; expires='+ d.toUTCString() +'; path=/';
+  }
+
+  /**
+   * Delete cookie helper
+   * @param {string} cookie name to delete
+   */
+  function deleteCookie(name) {
+    document.cookie = name +'=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+  }
+
+  /**
+   * Get a cookie
+   * @param  {string} name
+   * @return {string} Cookie's value
+   */
+  function getCookie(name) {
+    var ca = document.cookie.split(';');
+    name = name + '=';
+    for(var i=0; i<ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1);
+      if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
+    }
+    return undefined;
+  }
+
 
 })(jQuery, 'bica-cookie-alert', window, document);
