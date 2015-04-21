@@ -43,11 +43,8 @@ var bica = (function($, namespace, window, document, undefined){
       cookie: {name: 'bica', value: 'is_approved', days: '730'},
       // Min allowed font size
       minFontSize: 12,
-      // Views files
-      views: {
-        disclaimer: 'disclaimer',
-        info: 'info'
-      }
+      // View templates
+      views: {disclaimer: 'disclaimer', info: 'info'}
     };
 
 
