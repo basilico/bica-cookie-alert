@@ -36,9 +36,21 @@
       // i18n strings
       translations: {},
       // Plugin absolute path
-      root: getAbsolutePath()
+      root: getAbsolutePath(),
+      // Cookie settings (expires in 2 years)
+      cookie: {name: 'bica', value: 'is_approved', days: '730'},
     };
 
+
+  /**
+   * If cookie is not set, skip init
+   */
+  var checkCookie = function() {
+    var cookie = getCookie( plugin.cookie.name );
+    if (cookie != plugin.cookie.value) {
+      init();
+    }
+  };
 
   /**
    * Initializes plugin
@@ -98,7 +110,7 @@
     $wrapper.find('[data-action="dismiss"]')
       .on('click', function(){
         $wrapper.fadeOut('fast');
-        setCookie('bica', 'user_approved');
+        setCookie( plugin.cookie );
       });
   };
 
@@ -118,12 +130,13 @@
     applyEvents();
     applyStyles();
     translateLabels();
+    // Show wrapper after delay
     $wrapper.delay(settings.showAfter).slideDown('medium');
   });
 
 
   // Run
-  init();
+  checkCookie();
 
 
 
@@ -179,14 +192,15 @@
 
   /**
    * Set cookie helper
-   * @param {string} name
-   * @param {string} value
-   * @param {number} days
+   * @param options:
+   *        {string} name
+   *        {string} value
+   *        {number} days
    */
-  function setCookie(name, value, days) {
+  function setCookie(options) {
     var d = new Date();
-    d.setTime(d.getTime() + (days*24*60*60*1000));
-    document.cookie = name +'='+ value +'; expires='+ d.toUTCString();
+    d.setTime(d.getTime() + (options.days * (24*60*60*1000)));
+    document.cookie = options.name +'='+ options.value +'; expires='+ d.toUTCString() +'; path=/';
   }
 
   /**
@@ -194,7 +208,7 @@
    * @param {string} cookie name to delete
    */
   function deleteCookie(name) {
-    document.cookie = name +'=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+    document.cookie = name +'=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
   }
 
   /**
