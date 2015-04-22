@@ -1,12 +1,13 @@
 /*
- * `Basilico Interactive Cookie Alert` Plugin for jQuery
- * (aka bica)
+ * Basilico Interactive Cookie Alert (aka bica)
+ * Plugin for jQuery
  *
  * @author Dharma Ferrari
  * @link http://github.com/basilico
  * @created Apr 14th, 2015
  *
  * Description:
+ *   Universal cookie plugin, i18n ready, fully customizable
  *
  * Usage:
  *   <script src="vendor/bica/js/bica.js"></script>
@@ -17,24 +18,15 @@ var bica = (function($, namespace, window, document, undefined){
     // Cache objects
     $wrapper,
     $window = $(window),
+
     // Settings container
     settings = {},
-    // Default settings
-    defaults = {
-      txtColor: '#000',
-      btnTxtColor: '#fff',
-      btnBgBackgrund: '#666',
-      bgColor: '#ffffff', // this prop needs #rrggbb notation (full)
-      bgOpacity: 0.9,
-      style: 'inline',
-      // Fetch language from <html:lang> attribute, or use default
-      language: document.documentElement.lang || 'it',
-      // Milliseconds before show up
-      showAfter: 1200
-    },
+
     // Private plugin settings
     plugin = {
       initialized: false,
+      // Default language
+      defaultLang: 'en',
       // i18n strings
       translations: {},
       // Plugin absolute path
@@ -42,9 +34,21 @@ var bica = (function($, namespace, window, document, undefined){
       // Cookie settings (expires in 2 years)
       cookie: {name: 'bica', value: 'is_approved', days: '730'},
       // Min allowed font size
-      minFontSize: 12,
-      // View templates
-      views: {disclaimer: 'disclaimer', info: 'info'}
+      minFontSize: 12
+    },
+
+    // Default settings
+    defaults = {
+      style: 'inline',
+      txtColor: '#000',
+      btnTxtColor: '#fff',
+      btnBgBackgrund: '#666',
+      bgColor: '#ffffff', // this prop needs #rrggbb notation (full)
+      bgOpacity: 0.9,
+      lang: document.documentElement.lang || plugin.defaultLang,
+      showAfter: 1200, // milliseconds before show up
+      useStylesheet: true,
+      infoUrl: undefined
     };
 
 
@@ -71,12 +75,12 @@ var bica = (function($, namespace, window, document, undefined){
    * Load i18n translations
    */
   var loadTranslations = function() {
-    $.getJSON(plugin.root +'i18n/'+ settings.language +'.json', function(json) {
-      plugin.translations = json[settings.language];
+    $.getJSON(plugin.root +'i18n/'+ settings.lang +'.json', function(json) {
+      plugin.translations = json[settings.lang];
       if (json.status == 'OK') {
         $window.trigger('bica-trans-loaded');
       } else {
-        notify('Translation json not well formatted');
+        notify('Translation json’s not-well-formatted');
       }
     });
   };
@@ -86,11 +90,13 @@ var bica = (function($, namespace, window, document, undefined){
    */
   var loadView = function() {
     // Inject CSS
-    $('head').append( $('<link rel="stylesheet" type="text/css"/>').attr('href', plugin.root +'css/cookie.css') );
+    if (settings.useStylesheet) {
+      $('head').append( $('<link rel="stylesheet" type="text/css"/>').attr('href', plugin.root +'css/cookie.css') );
+    }
     // Add container to body and cache it
     $wrapper = $('<div/>', {"id": namespace, "class": namespace})
       .css({"background": makeBackground(), "color": settings.txtColor})
-      .load(plugin.root +'/view/'+ plugin.views.disclaimer +'.html', function(){
+      .load(plugin.root +'/view/disclaimer.html', function(){
         $window.trigger('bica-view-loaded');
       })
       .prependTo('body')
@@ -98,21 +104,8 @@ var bica = (function($, namespace, window, document, undefined){
   };
 
   /**
-   * Mix color and opacity settings to get a rgba background
-   * @return {string} rgba() color notation
-   */
-  function makeBackground() {
-    if (settings.bgColor.length != 7) {
-      notify(['HEX too short', settings.bgColor], 'error');
-      return settings.bgColor;
-    }
-    var color = hex2rgb(settings.bgColor);
-    color.push(settings.bgOpacity);
-    return 'rgba('+ color.join(',') +')';
-  }
-
-  /**
    * Translates labels
+   * Default language doesn't need translations
    */
   var translateLabels = function() {
     $('[data-trans]').each(function() {
@@ -124,10 +117,17 @@ var bica = (function($, namespace, window, document, undefined){
    * Apply events
    */
   var applyEvents = function() {
+    // Dismiss button
     $wrapper.find('[data-action="dismiss"]')
       .on('click', function(){
         $wrapper.fadeOut('fast');
         setCookie( plugin.cookie );
+      });
+
+    // Learn More button
+    $wrapper.find('[data-action="info"]')
+      .on('click', function(){
+        window.location.href = settings.infoUrl;
       });
   };
 
@@ -135,9 +135,17 @@ var bica = (function($, namespace, window, document, undefined){
    * Apply CSS styles
    */
   var applyStyles = function() {
+    // Display style
     $wrapper.addClass(settings.style);
+
+    // Button style
     $wrapper.find('[data-role="button"]')
       .css({"color": settings.btnTxtColor, "background": settings.btnBgBackgrund});
+
+    // Remove info link if no url is provided
+    if (settings.infoUrl === undefined) {
+      $wrapper.find('[data-action="info"]').remove();
+    }
 
     // Check that min font size is not smaller than allowed
     $wrapper.css({
@@ -147,6 +155,7 @@ var bica = (function($, namespace, window, document, undefined){
 
 
   // Events
+
   $window.on('bica-ready', function(){
     plugin.initialized = true;
     loadTranslations();
@@ -162,6 +171,20 @@ var bica = (function($, namespace, window, document, undefined){
 
 
   // Utilities
+
+  /**
+   * Mix color and opacity settings to get a rgba background
+   * @return {string} rgba() color notation
+   */
+  function makeBackground() {
+    if (settings.bgColor.length != 7) {
+      notify(['HEX too short', settings.bgColor], 'error');
+      return settings.bgColor;
+    }
+    var color = hex2rgb(settings.bgColor);
+    color.push(settings.bgOpacity);
+    return 'rgba('+ color.join(',') +')';
+  }
 
   /**
    * Private function to get plugin absolute path
@@ -252,6 +275,7 @@ var bica = (function($, namespace, window, document, undefined){
 
 
   // Public methods
+
   return {
     'init': init,
     'destroy': destroy
