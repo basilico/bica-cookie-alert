@@ -191,10 +191,9 @@ var bica = (function($, window, document, namespace, undefined) {
    * @return {string} Absolute url to plugin root
    */
   function getAbsolutePath() {
-    var
-      baseUrl = 'js/bica.js',
-      src = $('script[src$="'+ baseUrl +'"]')[0].src;
-    return src.replace(baseUrl, '');
+    var src = $('script[src*="'+ namespace +'"]')[0].src;
+    // Removing trailing js/ from path
+    return src.substr(0, src.lastIndexOf('js/'));
   }
 
   /**
