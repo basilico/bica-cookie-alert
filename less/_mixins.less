@@ -1,0 +1,49 @@
+// Mediaqueries steps
+@desktophd:                 ~"only screen and (min-width: 1680px)";
+@desktop:                   ~"only screen and (min-width: 1025px) and (max-width: 1679px)";
+@desktopsd:                 ~"only screen and (max-width: 1024px)";
+@tablet:                    ~"only screen and (min-device-width: 600px) and (max-device-width: 1024px)";
+@tablet-landscape:          ~"only screen and (min-device-width: 600px) and (max-device-width: 1024px) and (orientation: landscape)";
+@tablet-portrait:           ~"only screen and (min-device-width: 600px) and (max-device-width: 1024px) and (orientation: portrait)";
+@phone:                     ~"only screen and (min-device-width: 200px) and (max-device-width: 640px)";
+@phone-landscape:           ~"only screen and (min-device-width: 200px) and (max-device-width: 640px) and (orientation: landscape)";
+@phone-portrait:            ~"only screen and (min-device-width: 200px) and (max-device-width: 640px) and (orientation: portrait)";
+
+// Clearfix
+.cf() {
+    *zoom: 1;
+    &::before,
+    &:after {
+        content: " ";
+        display: table;
+        clear: both;
+    }
+}
+
+// Column
+.half-col() {
+    float: left;
+    width: 50%;
+}
+
+// Floating
+.right() {
+    .half-col();
+    text-align: right;
+}
+.left() {
+    .half-col();
+    text-align: left;
+}
+.center() {
+    text-align: center;
+}
+
+// Animations
+.transition(@options) {
+    -webkit-transition: @options;
+    -moz-transition: @options;
+    -ms-transition: @options;
+    -o-transition: @options;
+    transition: @options;
+}
