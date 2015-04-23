@@ -1,5 +1,5 @@
 /*
- * Basilico Interactive Cookie Alert (aka bica)
+ * Basilico Interactive Cookie Alert for EU Cookie's Law (aka bica)
  * Plugin for jQuery
  *
  * @author Dharma Ferrari
@@ -7,7 +7,7 @@
  * @created Apr 14th, 2015
  *
  * Description:
- *   Universal cookie plugin, i18n ready, fully customizable
+ *   Universal cookie alert plugin, i18n ready, fully customizable
  *
  * Usage:
  *   <script src="vendor/bica/js/bica.js"></script>
