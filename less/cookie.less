@@ -24,7 +24,7 @@
 
     [data-role="button"] {
         background: transparent;
-        padding: 4px 10px;
+        padding: 2px 8px;
         border-radius: 4px;
         margin: 0 5px;
     }
@@ -34,28 +34,31 @@
     .cf();
     padding: 5px 20px;
 
+    @media @phone { .center(); padding: 10px; }
+
     .bica-disclaimer {
-        .stack & {
+        .bica-stack & {
             .center();
             padding-bottom: 20px;
         }
-        .inline & {
+        .bica-inline & {
             display: inline-block;
         }
-        .column & {
+        .bica-column & {
             .left();
         }
     }
 
     .bica-actions {
-        .stack & {
+        .bica-stack & {
             .center();
         }
-        .inline & {
+        .bica-inline & {
             display: inline-block;
             padding-left: 15px;
+            @media @phone { padding-top: 10px; padding-left: 0; }
         }
-        .column & {
+        .bica-column & {
             .right();
         }
     }

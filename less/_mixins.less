@@ -1,3 +1,14 @@
+// Mediaqueries steps
+@desktophd:                 ~"only screen and (min-width: 1680px)";
+@desktop:                   ~"only screen and (min-width: 1025px) and (max-width: 1679px)";
+@desktopsd:                 ~"only screen and (max-width: 1024px)";
+@tablet:                    ~"only screen and (min-device-width: 600px) and (max-device-width: 1024px)";
+@tablet-landscape:          ~"only screen and (min-device-width: 600px) and (max-device-width: 1024px) and (orientation: landscape)";
+@tablet-portrait:           ~"only screen and (min-device-width: 600px) and (max-device-width: 1024px) and (orientation: portrait)";
+@phone:                     ~"only screen and (min-device-width: 200px) and (max-device-width: 640px)";
+@phone-landscape:           ~"only screen and (min-device-width: 200px) and (max-device-width: 640px) and (orientation: landscape)";
+@phone-portrait:            ~"only screen and (min-device-width: 200px) and (max-device-width: 640px) and (orientation: portrait)";
+
 // Clearfix
 .cf() {
     *zoom: 1;
@@ -25,7 +36,6 @@
     text-align: left;
 }
 .center() {
-    width: 100%;
     text-align: center;
 }
 
