@@ -13,7 +13,7 @@
  *   <script src="vendor/bica/js/bica.js"></script>
  *   <script>bica.init({ <options> })</script>
  */
-var bica = (function($, namespace, window, document, undefined){
+var bica = (function($, window, document, namespace, undefined) {
   var
     // Cache objects
     $wrapper,
@@ -32,7 +32,7 @@ var bica = (function($, namespace, window, document, undefined){
       // Plugin absolute path
       root: getAbsolutePath(),
       // Cookie settings (expires in 2 years)
-      cookie: {name: 'bica', value: 'is_approved', days: '730'},
+      cookie: {name: namespace, value: 'is_approved', days: '730'},
       // Min allowed font size
       minFontSize: 12
     },
@@ -136,7 +136,7 @@ var bica = (function($, namespace, window, document, undefined){
    */
   var applyStyles = function() {
     // Display style
-    $wrapper.addClass(settings.style);
+    $wrapper.addClass(namespace +'-'+ settings.style);
 
     // Button style
     $wrapper.find('[data-role="button"]')
@@ -214,7 +214,7 @@ var bica = (function($, namespace, window, document, undefined){
    */
   function notify( message, type ) {
     type = type || 'info';
-    message = '['+ namespace.replace(/-/g,' ').toUpperCase()  +']: '+ message;
+    message = '['+ namespace.toUpperCase() +']: '+ message;
     if ( window.console && window.console[type] ) {
       console[type]( message );
     } else {
@@ -281,4 +281,4 @@ var bica = (function($, namespace, window, document, undefined){
     'destroy': destroy
   };
 
-})(jQuery, 'bica-cookie-alert', window, document);
+})(jQuery, window, document, 'bica');
