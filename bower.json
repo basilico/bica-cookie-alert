@@ -1,0 +1,24 @@
+{
+  "name": "bica",
+  "version": "1.0.0",
+  "homepage": "https://github.com/basilico/bica",
+  "authors": [
+    "Dharma Ferrari <dharma@basili.co>"
+  ],
+  "description": "Universal cookie alert plugin, i18n ready, fully customizable.",
+  "main": "js/bica.js",
+  "keywords": [
+    "eu",
+    "cookie",
+    "law"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "bower_components",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": ">= 1.5.3"
+  }
+}
