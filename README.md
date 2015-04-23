@@ -5,8 +5,8 @@ Universal cookie alert plugin, i18n ready, fully customizable. Depends on jQuery
 ## Usage
 
 ```html
-    <script src="vendor/bica/js/bica.js"></script>
-    <script>bica.init({ <options> })</script>
+<script src="vendor/bica/js/bica.js"></script>
+<script>bica.init({ <options> })</script>
 ```
 
 
