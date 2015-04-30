@@ -2,12 +2,32 @@
 
 Universal cookie alert plugin, i18n ready, fully customizable. Depends on jQuery (works both on v1 and v2).
 
+See a [live demo](http://www.basili.co?ref=gh).
+
+
+## Install
+
+### Bower 
+
+Install and save the dependency with `bower install bica --save`.
+
+### Manually
+
+Clone this repository or download and uncompress a `*.tar.gz` [release](https://github.com/basilico/bica/releases) in your js directory.
+
+
 ## Usage
 
+Copy/paste this code at the bottom of your html page(s), just before `</body>` closing tag.
+
 ```html
+<!-- jQuery loaded from a cdn -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="vendor/bica/js/bica.js"></script>
 <script>bica.init({ <options> })</script>
 ```
+
+Enjoy!
 
 
 ## Available options
@@ -44,3 +64,19 @@ Bool (default to `true`). Whether to use embedded stylesheet or not.
 ### infoUrl
 String (default to <empty_string>). Specify the url to link the *Learn more* button. If no url is provided, the button will not appear.
 
+
+## i18n
+
+- PR to submit new translations.
+- Now available in italian and english.
+
+
+## Todo
+
+- Customizable text via options.
+- Remove jQuery dependency.
+
+
+## License
+
+Script is licensed under MIT license.

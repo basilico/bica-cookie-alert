@@ -1,11 +1,11 @@
 {
-  "name": "bica",
-  "version": "1.0.0",
-  "homepage": "https://github.com/basilico/bica",
+  "name": "bica-cookie-alert",
+  "version": "1.0.3",
+  "homepage": "https://github.com/basilico/bica-cookie-alert",
   "authors": [
     "Dharma Ferrari <dharma@basili.co>"
   ],
-  "description": "Universal cookie alert plugin, i18n ready, fully customizable.",
+  "description": "Cookie Alert for EU Cookie's Law, i18n ready, fully customizable by Basilico Interactive",
   "main": "js/bica.js",
   "keywords": [
     "eu",
