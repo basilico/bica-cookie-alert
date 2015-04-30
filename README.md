@@ -74,6 +74,7 @@ String (default to <empty_string>). Specify the url to link the *Learn more* but
 ## Todo
 
 - Customizable text via options.
+- Remove jQuery dependency.
 
 
 ## License
