@@ -9,11 +9,11 @@ See a [live demo](http://www.basili.co?ref=gh).
 
 ### Bower 
 
-Install and save the dependency with `bower install bica --save`.
+Install and save the dependency with `bower install bica-cookie-alert --save`.
 
 ### Manually
 
-Clone this repository or download and uncompress a `*.tar.gz` [release](https://github.com/basilico/bica/releases) in your js directory.
+Clone this repository or download and uncompress a `*.tar.gz` [release](https://github.com/basilico/bica-cookie-alert/releases) in your js directory.
 
 
 ## Usage
@@ -23,7 +23,7 @@ Copy/paste this code at the bottom of your html page(s), just before `</body>` c
 ```html
 <!-- jQuery loaded from a cdn -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="vendor/bica/js/bica.js"></script>
+<script src="vendor/bica-cookie-alert/js/bica.js"></script>
 <script>bica.init({ <options> })</script>
 ```
 
