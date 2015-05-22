@@ -2,7 +2,7 @@
 .bica [data-role="link"]{text-decoration:none}.bica [data-role="link"]:hover{text-decoration:underline}
 .bica [data-role="button"]{background:transparent;padding:2px 8px;border-radius:4px;margin:0 5px}
 .bica-content{*zoom:1;padding:5px 20px}.bica-content::before,.bica-content:after{content:" ";display:table;clear:both}
-@media only screen and (min-device-width: 200px) and (max-device-width: 640px){.bica-content{text-align:center;padding:10px}}.bica-stack .bica-content .bica-disclaimer{text-align:center;padding-bottom:20px}
+@media only screen and (min-device-width: 200px) and (max-device-width: 640px),only screen and (min-device-width: 600px) and (max-device-width: 1024px) and (orientation: portrait){.bica-content{text-align:center;padding:10px}}.bica-stack .bica-content .bica-disclaimer{text-align:center;padding-bottom:20px}
 .bica-inline .bica-content .bica-disclaimer{display:inline-block}
 .bica-column .bica-content .bica-disclaimer{float:left;width:50%;text-align:left}
 .bica-stack .bica-content .bica-actions{text-align:center}
