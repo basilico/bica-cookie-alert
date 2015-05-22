@@ -22,8 +22,8 @@ Copy/paste this code at the bottom of your html page(s), just before `</body>` c
 
 ```html
 <!-- jQuery loaded from a cdn -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="vendor/bica-cookie-alert/js/bica.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script src="path-to-vendors/bica-cookie-alert/js/bica.min.js"></script>
 <script>bica.init({ <options> })</script>
 ```
 
