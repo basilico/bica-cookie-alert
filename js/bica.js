@@ -100,7 +100,7 @@ var bica = (function($, window, document, namespace, undefined) {
     }
     // Add container to body and cache it
     $wrapper = $('<div/>', {"id": namespace, "class": namespace})
-      .css({"background": makeBackground(), "color": settings.txtColor})
+      .attr('style', "background-color:"+ makeBackground(true) +";background-color:"+ makeBackground() +";color:"+ settings.txtColor)
       .load(plugin.root +'/view/disclaimer.html', function(){
         $window.trigger('bica-view-loaded');
       })
@@ -181,9 +181,13 @@ var bica = (function($, window, document, namespace, undefined) {
    * Mix color and opacity settings to get a rgba background
    * @return {string} rgba() color notation
    */
-  function makeBackground() {
+  function makeBackground(noRgba) {
+    noRgba = noRgba || false;
     if (settings.bgColor.length != 7) {
       notify(['HEX too short', settings.bgColor], 'error');
+      return settings.bgColor;
+    }
+    if (noRgba) {
       return settings.bgColor;
     }
     var color = hex2rgb(settings.bgColor);
