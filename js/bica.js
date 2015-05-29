@@ -91,7 +91,12 @@ var bica = (function($, window, document, namespace, undefined) {
   var loadView = function() {
     // Inject CSS
     if (settings.useStylesheet) {
-      $('head').append( $('<link rel="stylesheet" type="text/css"/>').attr('href', plugin.root +'css/cookie.css') );
+      // IE8 fix
+      if (document.createStyleSheet) {
+        document.createStyleSheet(plugin.root +'css/cookie.css');
+      } else {
+        $('head').append( $('<link rel="stylesheet" type="text/css"/>').attr('href', plugin.root +'css/cookie.css') );
+      }
     }
     // Add container to body and cache it
     $wrapper = $('<div/>', {"id": namespace, "class": namespace})
