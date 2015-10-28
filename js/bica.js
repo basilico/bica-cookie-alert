@@ -25,10 +25,30 @@ var bica = (function($, window, document, namespace, undefined) {
     // Private plugin settings
     plugin = {
       initialized: false,
+      // Default language
+      defaultLang: 'en',
       // Cookie settings (expires in 2 years)
       cookie: {name: namespace, value: 'is_approved', days: '730'},
       // Min allowed font size
-      minFontSize: 12
+      minFontSize: 12,
+      // Default labels
+      labels: {
+        en: {
+          disclaimer: "Cookies help us improve our website experience. By continuing to browse, you agree to our use of cookies.",
+          info: "Learn more",
+          dismiss: "CLOSE"
+        },
+        it: {
+          disclaimer: "I cookie ci aiutano a migliorare l'esperienza del nostro sito web. Continuando la navigazione, accetti l'utilizzo dei cookie da parte nostra.",
+          info: "Informazioni",
+          dismiss: "CHIUDI"
+        },
+        de: {
+          disclaimer: "Cookies erlauben uns, die Erfahrung unserer Webseite zu verbessern. Beim Fortsetzen das Surfen, du nimmst die Verwendung der Cookies unsererseits an.",
+          info: "Informationen",
+          dismiss: "Schließen"
+        }
+      }
     },
 
     // Default settings
@@ -39,13 +59,9 @@ var bica = (function($, window, document, namespace, undefined) {
       btnBgBackgrund: '#666',
       bgColor: '#ffffff', // this prop needs #rrggbb notation (full)
       bgOpacity: 0.9,
+      lang: document.documentElement.lang || plugin.defaultLang,
       showAfter: 1200, // milliseconds before show up
       infoUrl: undefined,
-      labels: {
-        disclaimer: "Cookies help us improve our website experience. By continuing to browse, you agree to our use of cookies.",
-        info: "Learn more",
-        dismiss: "CLOSE"
-      }
     };
 
 
@@ -76,11 +92,11 @@ var bica = (function($, window, document, namespace, undefined) {
     var disclaimer =
       '<div class="bica-content">'
         + '<div class="bica-disclaimer">'
-        +   '<span data-trans="disclaimer">' + settings.labels.disclaimer + '</span>'
+        +   '<span data-trans="disclaimer">' + plugin.labels[settings.lang].disclaimer + '</span>'
         +  '</div>'
         +  '<div class="bica-actions">'
-        +    '<span data-role="link" data-action="info" data-trans="info">' + settings.labels.info + '</span>'
-        +    '<span data-role="button" data-action="dismiss" data-trans="dismiss">' + settings.labels.dismiss + '</span>'
+        +    '<span data-role="link" data-action="info" data-trans="info">' + plugin.labels[settings.lang].info + '</span>'
+        +    '<span data-role="button" data-action="dismiss" data-trans="dismiss">' + plugin.labels[settings.lang].dismiss + '</span>'
         +  '</div>' +
       '</div>';
 
