@@ -74,19 +74,19 @@ var bica = (function($, window, document, namespace, undefined) {
   var createView = function() {
     // Add container to body and cache it
     var disclaimer =
-      '<div class="bica-content">
-          <div class="bica-disclaimer">
-              <span data-trans="disclaimer">' + settings.labels.disclaimer + '</span>
-          </div>
-          <div class="bica-actions">
-              <span data-role="link" data-action="info" data-trans="info">' + settings.labels.info + '</span>
-              <span data-role="button" data-action="dismiss" data-trans="dismiss">' + settings.labels.dismiss + '</span>
-          </div>
-      </div>';
+      '<div class="bica-content">'
+        + '<div class="bica-disclaimer">'
+        +   '<span data-trans="disclaimer">' + settings.labels.disclaimer + '</span>'
+        +  '</div>'
+        +  '<div class="bica-actions">'
+        +    '<span data-role="link" data-action="info" data-trans="info">' + settings.labels.info + '</span>'
+        +    '<span data-role="button" data-action="dismiss" data-trans="dismiss">' + settings.labels.dismiss + '</span>'
+        +  '</div>' +
+      '</div>';
 
     $wrapper = $('<div/>', {"id": namespace, "class": namespace})
       .attr('style', "background-color:"+ makeBackground(true) +";background-color:"+ makeBackground() +";color:"+ settings.txtColor)
-      .html(disclaimer);
+      .html(disclaimer)
       .prependTo('body')
     ;
   };
@@ -97,14 +97,14 @@ var bica = (function($, window, document, namespace, undefined) {
   var applyEvents = function() {
     // Dismiss button
     $wrapper.find('[data-action="dismiss"]')
-      .on('click', function(){
+      .bind('click', function(){
         $wrapper.fadeOut('fast');
         setCookie( plugin.cookie );
       });
 
     // Learn More button
     $wrapper.find('[data-action="info"]')
-      .on('click', function(){
+      .bind('click', function(){
         window.location.href = settings.infoUrl;
       });
   };
@@ -134,11 +134,9 @@ var bica = (function($, window, document, namespace, undefined) {
 
   // Events
 
-  $window.on('bica-ready', function(){
+  $window.bind('bica-ready', function(){
     plugin.initialized = true;
-  });
-  $window.on('bica-trans-loaded', createView);
-  $window.on('bica-view-loaded', function(){
+    createView();
     applyEvents();
     applyStyles();
     // Show wrapper after delay
