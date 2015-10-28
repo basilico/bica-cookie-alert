@@ -27,14 +27,28 @@ var bica = (function($, window, document, namespace, undefined) {
       initialized: false,
       // Default language
       defaultLang: 'en',
-      // i18n strings
-      translations: {},
-      // Plugin absolute path
-      root: getAbsolutePath(),
       // Cookie settings (expires in 2 years)
       cookie: {name: namespace, value: 'is_approved', days: '730'},
       // Min allowed font size
-      minFontSize: 12
+      minFontSize: 12,
+      // Default labels
+      labels: {
+        en: {
+          disclaimer: "Cookies help us improve our website experience. By continuing to browse, you agree to our use of cookies.",
+          info: "Learn more",
+          dismiss: "CLOSE"
+        },
+        it: {
+          disclaimer: "I cookie ci aiutano a migliorare l'esperienza del nostro sito web. Continuando la navigazione, accetti l'utilizzo dei cookie da parte nostra.",
+          info: "Informazioni",
+          dismiss: "CHIUDI"
+        },
+        de: {
+          disclaimer: "Cookies erlauben uns, die Erfahrung unserer Webseite zu verbessern. Beim Fortsetzen das Surfen, du nimmst die Verwendung der Cookies unsererseits an.",
+          info: "Informationen",
+          dismiss: "Schließen"
+        }
+      }
     },
 
     // Default settings
@@ -47,8 +61,7 @@ var bica = (function($, window, document, namespace, undefined) {
       bgOpacity: 0.9,
       lang: document.documentElement.lang || plugin.defaultLang,
       showAfter: 1200, // milliseconds before show up
-      useStylesheet: true,
-      infoUrl: undefined
+      infoUrl: undefined,
     };
 
 
@@ -72,50 +85,26 @@ var bica = (function($, window, document, namespace, undefined) {
   };
 
   /**
-   * Load i18n translations
-   */
-  var loadTranslations = function() {
-    $.getJSON(plugin.root +'i18n/'+ settings.lang +'.json', function(json) {
-      plugin.translations = json[settings.lang];
-      if (json.status == 'OK') {
-        $window.trigger('bica-trans-loaded');
-      } else {
-        notify('Translation json’s not-well-formatted');
-      }
-    });
-  };
-
-  /**
    * Add css style and wrapper
    */
-  var loadView = function() {
-    // Inject CSS
-    if (settings.useStylesheet) {
-      // IE8 fix
-      if (document.createStyleSheet) {
-        document.createStyleSheet(plugin.root +'css/cookie.css');
-      } else {
-        $('head').append( $('<link rel="stylesheet" type="text/css"/>').attr('href', plugin.root +'css/cookie.css') );
-      }
-    }
+  var createView = function() {
     // Add container to body and cache it
+    var disclaimer =
+      '<div class="bica-content">'
+        + '<div class="bica-disclaimer">'
+        +   '<span data-trans="disclaimer">' + plugin.labels[settings.lang].disclaimer + '</span>'
+        +  '</div>'
+        +  '<div class="bica-actions">'
+        +    '<span data-role="link" data-action="info" data-trans="info">' + plugin.labels[settings.lang].info + '</span>'
+        +    '<span data-role="button" data-action="dismiss" data-trans="dismiss">' + plugin.labels[settings.lang].dismiss + '</span>'
+        +  '</div>' +
+      '</div>';
+
     $wrapper = $('<div/>', {"id": namespace, "class": namespace})
       .attr('style', "background-color:"+ makeBackground(true) +";background-color:"+ makeBackground() +";color:"+ settings.txtColor)
-      .load(plugin.root +'/view/disclaimer.html', function(){
-        $window.trigger('bica-view-loaded');
-      })
+      .html(disclaimer)
       .prependTo('body')
     ;
-  };
-
-  /**
-   * Translates labels
-   * Default language doesn't need translations
-   */
-  var translateLabels = function() {
-    $('[data-trans]').each(function() {
-      this.innerHTML = plugin.translations[ this.attributes['data-trans'].value ];
-    });
   };
 
   /**
@@ -124,14 +113,14 @@ var bica = (function($, window, document, namespace, undefined) {
   var applyEvents = function() {
     // Dismiss button
     $wrapper.find('[data-action="dismiss"]')
-      .on('click', function(){
+      .bind('click', function(){
         $wrapper.fadeOut('fast');
         setCookie( plugin.cookie );
       });
 
     // Learn More button
     $wrapper.find('[data-action="info"]')
-      .on('click', function(){
+      .bind('click', function(){
         window.location.href = settings.infoUrl;
       });
   };
@@ -161,15 +150,11 @@ var bica = (function($, window, document, namespace, undefined) {
 
   // Events
 
-  $window.on('bica-ready', function(){
+  $window.bind('bica-ready', function(){
     plugin.initialized = true;
-    loadTranslations();
-  });
-  $window.on('bica-trans-loaded', loadView);
-  $window.on('bica-view-loaded', function(){
+    createView();
     applyEvents();
     applyStyles();
-    translateLabels();
     // Show wrapper after delay
     $wrapper.delay(settings.showAfter).slideDown('medium');
   });
@@ -193,16 +178,6 @@ var bica = (function($, window, document, namespace, undefined) {
     var color = hex2rgb(settings.bgColor);
     color.push(settings.bgOpacity);
     return 'rgba('+ color.join(',') +')';
-  }
-
-  /**
-   * Private function to get plugin absolute path
-   * @return {string} Absolute url to plugin root
-   */
-  function getAbsolutePath() {
-    var src = $('script[src*="'+ namespace +'"]')[0].src;
-    // Removing trailing js/ from path
-    return src.substr(0, src.lastIndexOf('js/'));
   }
 
   /**
