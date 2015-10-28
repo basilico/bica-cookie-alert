@@ -48,7 +48,12 @@ var bica = (function($, window, document, namespace, undefined) {
       lang: document.documentElement.lang || plugin.defaultLang,
       showAfter: 1200, // milliseconds before show up
       useStylesheet: true,
-      infoUrl: undefined
+      infoUrl: undefined,
+      labels: {
+        disclaimer: "Cookies help us improve our website experience. By continuing to browse, you agree to our use of cookies.",
+        info: "Learn more",
+        dismiss: "CLOSE"
+      }
     };
 
 
