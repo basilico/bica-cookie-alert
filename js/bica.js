@@ -25,12 +25,6 @@ var bica = (function($, window, document, namespace, undefined) {
     // Private plugin settings
     plugin = {
       initialized: false,
-      // Default language
-      defaultLang: 'en',
-      // i18n strings
-      translations: {},
-      // Plugin absolute path
-      root: getAbsolutePath(),
       // Cookie settings (expires in 2 years)
       cookie: {name: namespace, value: 'is_approved', days: '730'},
       // Min allowed font size
@@ -45,9 +39,7 @@ var bica = (function($, window, document, namespace, undefined) {
       btnBgBackgrund: '#666',
       bgColor: '#ffffff', // this prop needs #rrggbb notation (full)
       bgOpacity: 0.9,
-      lang: document.documentElement.lang || plugin.defaultLang,
       showAfter: 1200, // milliseconds before show up
-      useStylesheet: true,
       infoUrl: undefined,
       labels: {
         disclaimer: "Cookies help us improve our website experience. By continuing to browse, you agree to our use of cookies.",
@@ -77,50 +69,26 @@ var bica = (function($, window, document, namespace, undefined) {
   };
 
   /**
-   * Load i18n translations
-   */
-  var loadTranslations = function() {
-    $.getJSON(plugin.root +'i18n/'+ settings.lang +'.json', function(json) {
-      plugin.translations = json[settings.lang];
-      if (json.status == 'OK') {
-        $window.trigger('bica-trans-loaded');
-      } else {
-        notify('Translation json’s not-well-formatted');
-      }
-    });
-  };
-
-  /**
    * Add css style and wrapper
    */
-  var loadView = function() {
-    // Inject CSS
-    if (settings.useStylesheet) {
-      // IE8 fix
-      if (document.createStyleSheet) {
-        document.createStyleSheet(plugin.root +'css/cookie.css');
-      } else {
-        $('head').append( $('<link rel="stylesheet" type="text/css"/>').attr('href', plugin.root +'css/cookie.css') );
-      }
-    }
+  var createView = function() {
     // Add container to body and cache it
+    var disclaimer =
+      '<div class="bica-content">
+          <div class="bica-disclaimer">
+              <span data-trans="disclaimer">' + settings.labels.disclaimer + '</span>
+          </div>
+          <div class="bica-actions">
+              <span data-role="link" data-action="info" data-trans="info">' + settings.labels.info + '</span>
+              <span data-role="button" data-action="dismiss" data-trans="dismiss">' + settings.labels.dismiss + '</span>
+          </div>
+      </div>';
+
     $wrapper = $('<div/>', {"id": namespace, "class": namespace})
       .attr('style', "background-color:"+ makeBackground(true) +";background-color:"+ makeBackground() +";color:"+ settings.txtColor)
-      .load(plugin.root +'/view/disclaimer.html', function(){
-        $window.trigger('bica-view-loaded');
-      })
+      .html(disclaimer);
       .prependTo('body')
     ;
-  };
-
-  /**
-   * Translates labels
-   * Default language doesn't need translations
-   */
-  var translateLabels = function() {
-    $('[data-trans]').each(function() {
-      this.innerHTML = plugin.translations[ this.attributes['data-trans'].value ];
-    });
   };
 
   /**
@@ -168,13 +136,11 @@ var bica = (function($, window, document, namespace, undefined) {
 
   $window.on('bica-ready', function(){
     plugin.initialized = true;
-    loadTranslations();
   });
-  $window.on('bica-trans-loaded', loadView);
+  $window.on('bica-trans-loaded', createView);
   $window.on('bica-view-loaded', function(){
     applyEvents();
     applyStyles();
-    translateLabels();
     // Show wrapper after delay
     $wrapper.delay(settings.showAfter).slideDown('medium');
   });
@@ -198,16 +164,6 @@ var bica = (function($, window, document, namespace, undefined) {
     var color = hex2rgb(settings.bgColor);
     color.push(settings.bgOpacity);
     return 'rgba('+ color.join(',') +')';
-  }
-
-  /**
-   * Private function to get plugin absolute path
-   * @return {string} Absolute url to plugin root
-   */
-  function getAbsolutePath() {
-    var src = $('script[src*="'+ namespace +'"]')[0].src;
-    // Removing trailing js/ from path
-    return src.substr(0, src.lastIndexOf('js/'));
   }
 
   /**
