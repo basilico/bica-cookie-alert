@@ -72,9 +72,17 @@ Integer (default to `1200`). Number of milliseconds before the disclaimer show u
 
 String (default to <empty_string>). Specify the url to link the *Learn more* button. If no url is provided, the button will not appear.
 
+### fallbackLang
+
+String (default to `en`). Specify the fallback language.
+
 ### lang
 
-String (defaut to en) or fetched right from <html:lang> attribute. (Supported languages: `it`, `en`, `de`).
+String (default fetched right from <html:lang> attribute). (Supported languages: `it`, `en`, `de`).
+
+### labels
+
+Object (default `it`, `en`, `de` translations). Define view labels text.
 
 
 ## Changelog
@@ -89,7 +97,6 @@ String (defaut to en) or fetched right from <html:lang> attribute. (Supported la
 ## Todo
 
 - Remove jQuery dependency.
-- Add new languages support.
   
   
 ## License
