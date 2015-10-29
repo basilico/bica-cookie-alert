@@ -24,14 +24,24 @@ var bica = (function($, window, document, namespace, undefined) {
 
     // Private plugin settings
     plugin = {
+      // Sets to true once loaded
       initialized: false,
-      // Default language
-      defaultLang: 'en',
       // Cookie settings (expires in 2 years)
       cookie: {name: namespace, value: 'is_approved', days: '730'},
       // Min allowed font size
-      minFontSize: 12,
-      // Default labels
+      minFontSize: 12
+    },
+
+    // Default settings
+    defaults = {
+      style: 'inline',
+      txtColor: '#000',
+      btnTxtColor: '#fff',
+      btnBgBackgrund: '#666',
+      bgColor: '#ffffff', // this prop needs #rrggbb notation (full)
+      bgOpacity: 0.9,
+      fallbackLang: 'en',
+      lang: document.documentElement.lang,
       labels: {
         en: {
           disclaimer: "Cookies help us improve our website experience. By continuing to browse, you agree to our use of cookies.",
@@ -48,18 +58,7 @@ var bica = (function($, window, document, namespace, undefined) {
           info: "Informationen",
           dismiss: "Schließen"
         }
-      }
-    },
-
-    // Default settings
-    defaults = {
-      style: 'inline',
-      txtColor: '#000',
-      btnTxtColor: '#fff',
-      btnBgBackgrund: '#666',
-      bgColor: '#ffffff', // this prop needs #rrggbb notation (full)
-      bgOpacity: 0.9,
-      lang: document.documentElement.lang || plugin.defaultLang,
+      },
       showAfter: 1200, // milliseconds before show up
       infoUrl: undefined,
     };
@@ -75,12 +74,27 @@ var bica = (function($, window, document, namespace, undefined) {
    */
   var init = function( options ) {
     if (plugin.initialized) return notify('Re-init not allowed');
-    settings = $.extend({}, defaults, options);
+    settings = $.extend(true, {}, defaults, options);
     // If cookie is not set, skip init
     if (getCookie( plugin.cookie.name ) != plugin.cookie.value) {
       $window.trigger('bica-ready');
     } else {
       destroy();
+    }
+  };
+
+  /**
+   * Set language to use for bica
+   */
+
+  var setLanguage = function() {
+    // clean string in case of lang attribute is like [en-EN]
+    if (settings.lang) {
+      settings.lang = /^[a-z]{2}/.exec(settings.lang)[0];
+    }
+
+    if (!settings.labels[settings.lang]) {
+      settings.lang = settings.fallbackLang;
     }
   };
 
@@ -92,11 +106,11 @@ var bica = (function($, window, document, namespace, undefined) {
     var disclaimer =
       '<div class="bica-content">'
         + '<div class="bica-disclaimer">'
-        +   '<span data-trans="disclaimer">' + plugin.labels[settings.lang].disclaimer + '</span>'
+        +   '<span data-trans="disclaimer">' + settings.labels[settings.lang].disclaimer + '</span>'
         +  '</div>'
         +  '<div class="bica-actions">'
-        +    '<span data-role="link" data-action="info" data-trans="info">' + plugin.labels[settings.lang].info + '</span>'
-        +    '<span data-role="button" data-action="dismiss" data-trans="dismiss">' + plugin.labels[settings.lang].dismiss + '</span>'
+        +    '<span data-role="link" data-action="info" data-trans="info">' + settings.labels[settings.lang].info + '</span>'
+        +    '<span data-role="button" data-action="dismiss" data-trans="dismiss">' + settings.labels[settings.lang].dismiss + '</span>'
         +  '</div>' +
       '</div>';
 
@@ -152,6 +166,7 @@ var bica = (function($, window, document, namespace, undefined) {
 
   $window.bind('bica-ready', function(){
     plugin.initialized = true;
+    setLanguage();
     createView();
     applyEvents();
     applyStyles();
