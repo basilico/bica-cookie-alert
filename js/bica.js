@@ -60,7 +60,7 @@ var bica = (function($, window, document, namespace, undefined) {
         }
       },
       showAfter: 1200, // milliseconds before show up
-      infoUrl: undefined,
+      infoUrl: undefined
     };
 
 
