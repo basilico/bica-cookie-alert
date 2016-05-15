@@ -21,7 +21,7 @@ Clone this repository or download and uncompress a `*.tar.gz` [release](https://
 Copy/paste this code into the `<head>` tag of your html page(s), just before your layout stylesheet.
 
 ```html
-<link rel="stylesheet" type="text/css" href="path-to-vendors/bica-cookie-alert/css/cookie.min.css">
+<link rel="stylesheet" type="text/css" href="path-to-vendors/bica-cookie-alert/css/bica.min.css">
 ```
 
 Copy/paste this code at the bottom of your html page(s), just before `</body>` closing tag.
