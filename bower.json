@@ -7,7 +7,10 @@
     "Valerio Capogna <valerio@basili.co>"
   ],
   "description": "Cookie Alert for EU Cookie's Law, i18n ready, fully customizable by Basilico Interactive",
-  "main": "js/bica.js",
+  "main": [
+    "js/bica.js",
+    "css/bica.css"
+  ],
   "keywords": [
     "eu",
     "cookie",
